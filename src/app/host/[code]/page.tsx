@@ -12,7 +12,7 @@ import { TieCountdown } from "@/components/TieCountdown";
 import { InviteCard } from "@/components/InviteCard";
 import { useToast } from "@/components/Toast";
 import { useWinnerAnnouncements } from "@/components/useWinnerAnnouncements";
-import { getSupabase } from "@/lib/supabase";
+import { rpc } from "@/lib/supabase";
 import { getHostToken } from "@/lib/storage";
 import { errorMessage } from "@/lib/errors";
 import { useRoom } from "@/lib/useRoom";
@@ -34,7 +34,7 @@ export default function HostPage() {
     async (fn: HostAction) => {
       if (!token) return;
       setBusy(true);
-      const { error } = await getSupabase().rpc(fn, { p_code: code, p_host_token: token });
+      const { error } = await rpc(fn, { p_code: code, p_host_token: token });
       if (error) toast(errorMessage(error), "warn");
       await refresh();
       setBusy(false);

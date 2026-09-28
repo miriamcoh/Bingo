@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { AVATARS, Avatar } from "./Avatar";
 import { useToast } from "./Toast";
-import { getSupabase } from "@/lib/supabase";
+import { rpc } from "@/lib/supabase";
 import { errorMessage } from "@/lib/errors";
 import { setPlayerSession, type PlayerSession } from "@/lib/storage";
 
@@ -18,7 +18,7 @@ export function JoinForm({ code, onJoined }: { code: string; onJoined: (s: Playe
     if (!name.trim()) return toast("איך קוראים לך? 🙂", "warn");
     if (!avatar) return toast("בחרו דמות חמודה 🐰", "warn");
     setBusy(true);
-    const { data, error } = await getSupabase().rpc("join_room", {
+    const { data, error } = await rpc("join_room", {
       p_code: code,
       p_name: name.trim(),
       p_avatar: avatar,

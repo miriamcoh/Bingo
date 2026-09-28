@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { getSupabase } from "@/lib/supabase";
+import { rpc } from "@/lib/supabase";
 import { TIE_WINDOW_SECONDS } from "@/lib/types";
 
 /** ספירה לאחור של חלון התיקו. בסופה מבקשים מהשרת לסגור את המשחק. */
@@ -23,7 +23,7 @@ export function TieCountdown({ code, deadline, onDone }: { code: string; deadlin
     const finalize = async () => {
       // השרת מסרב אם השעון שלו עוד לא הגיע – ננסה שוב עוד רגע
       for (let i = 0; i < 6; i++) {
-        const { data } = await getSupabase().rpc("finalize_room", { p_code: code });
+        const { data } = await rpc("finalize_room", { p_code: code });
         if (data === "finished") break;
         await new Promise((r) => setTimeout(r, 1000));
       }

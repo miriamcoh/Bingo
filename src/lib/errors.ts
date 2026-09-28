@@ -11,6 +11,7 @@ const MESSAGES: Record<string, string> = {
   BAD_AVATAR: "צריך לבחור דמות",
   ROOM_FULL: "החדר מלא",
   BAD_TOKEN: "לא הצלחנו לזהות אותך, נסו לרענן את הדף",
+  TIMEOUT: "השרת לא עונה 🙁 בדקו את החיבור לאינטרנט ונסו שוב",
 };
 
 export function errorMessage(err: unknown): string {
@@ -21,7 +22,8 @@ export function errorMessage(err: unknown): string {
   for (const code of Object.keys(MESSAGES)) {
     if (text.includes(code)) return MESSAGES[code];
   }
-  return "אופס, משהו השתבש. נסו שוב 🙏";
+  // מצרפים את הטקסט המקורי כדי שיהיה קל להבין מה קרה
+  return `אופס, משהו השתבש 🙏 (${text.slice(0, 120)})`;
 }
 
 export function errorCode(err: unknown): string | null {

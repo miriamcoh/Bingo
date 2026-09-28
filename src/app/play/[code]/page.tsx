@@ -14,7 +14,7 @@ import { Podium } from "@/components/Podium";
 import { TieCountdown } from "@/components/TieCountdown";
 import { useToast } from "@/components/Toast";
 import { useWinnerAnnouncements } from "@/components/useWinnerAnnouncements";
-import { getSupabase } from "@/lib/supabase";
+import { rpc } from "@/lib/supabase";
 import { getPlayerSession, setPlayerSession, type PlayerSession } from "@/lib/storage";
 import { errorCode, errorMessage } from "@/lib/errors";
 import { useRoom } from "@/lib/useRoom";
@@ -42,7 +42,7 @@ export default function PlayPage() {
     if (!session || gameNo === undefined) return;
     let cancelled = false;
     (async () => {
-      const { data, error } = await getSupabase().rpc("get_my_card", {
+      const { data, error } = await rpc("get_my_card", {
         p_player_id: session.playerId,
         p_token: session.token,
       });
@@ -85,7 +85,7 @@ export default function PlayPage() {
       const optimistic = drawnSet.has(n);
       if (optimistic) setMyCard((c) => (c ? { ...c, marked: [...c.marked, n] } : c));
 
-      const { data, error } = await getSupabase().rpc("mark_number", {
+      const { data, error } = await rpc("mark_number", {
         p_player_id: session.playerId,
         p_token: session.token,
         p_number: n,

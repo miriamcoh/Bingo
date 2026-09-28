@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Shell } from "@/components/Shell";
 import { Avatar } from "@/components/Avatar";
 import { useToast } from "@/components/Toast";
-import { getSupabase } from "@/lib/supabase";
+import { rpc } from "@/lib/supabase";
 import { setHostToken } from "@/lib/storage";
 import { errorMessage } from "@/lib/errors";
 
@@ -18,7 +18,7 @@ export default function Home() {
 
   async function createRoom() {
     setCreating(true);
-    const { data, error } = await getSupabase().rpc("create_room");
+    const { data, error } = await rpc("create_room");
     if (error || !data) {
       toast(errorMessage(error), "warn");
       setCreating(false);

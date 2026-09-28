@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { isConfigured } from "@/lib/supabase";
+import { configProblem, isConfigured } from "@/lib/supabase";
 
 export function Shell({ children, wide = false }: { children: ReactNode; wide?: boolean }) {
   return (
@@ -20,10 +20,17 @@ function SetupNotice() {
     <div className="card-surface p-6 text-center">
       <p className="text-4xl">🛠️</p>
       <h2 className="mt-2 font-display text-xl font-bold">עוד רגע מוכנים!</h2>
+      {configProblem === "bad-url" ? (
+        <p className="mt-2">
+          הכתובת ב-<code dir="ltr">NEXT_PUBLIC_SUPABASE_URL</code> לא תקינה. היא צריכה להיראות כמו{" "}
+          <code dir="ltr">https://abcd1234.supabase.co</code>. מתקנים ב-Vercel ומפרסמים מחדש.
+        </p>
+      ) : (
       <p className="mt-2">
         חסרים המשתנים <code dir="ltr">NEXT_PUBLIC_SUPABASE_URL</code> ו-
         <code dir="ltr">NEXT_PUBLIC_SUPABASE_ANON_KEY</code>. מוסיפים אותם ב-Vercel ומפרסמים מחדש.
       </p>
+      )}
     </div>
   );
 }

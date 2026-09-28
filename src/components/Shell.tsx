@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { configProblem, isConfigured } from "@/lib/supabase";
+import { configProblem, isConfigured, receivedUrlPreview } from "@/lib/supabase";
 
 export function Shell({ children, wide = false }: { children: ReactNode; wide?: boolean }) {
   return (
@@ -24,6 +24,10 @@ function SetupNotice() {
         <p className="mt-2">
           הכתובת ב-<code dir="ltr">NEXT_PUBLIC_SUPABASE_URL</code> לא תקינה. היא צריכה להיראות כמו{" "}
           <code dir="ltr">https://abcd1234.supabase.co</code>. מתקנים ב-Vercel ומפרסמים מחדש.
+          <br />
+          <span className="text-sm text-plum/60">
+            מה שהתקבל: <code dir="ltr">{receivedUrlPreview || "(ריק)"}</code>
+          </span>
         </p>
       ) : (
       <p className="mt-2">

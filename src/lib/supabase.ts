@@ -1,12 +1,23 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
-const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
+const clean = (v: string | undefined) => v?.trim().replace(/^["']|["']$/g, "").trim();
+const looksLikeUrl = (v: string) => /^https?:\/\//i.test(v) || /\.supabase\.(co|in)/i.test(v);
 
-// מקבלים גם כתובת שהודבקה עם תוספות (למשל ‎/rest/v1/‎) – משאירים רק את הבסיס
+let rawUrl = clean(process.env.NEXT_PUBLIC_SUPABASE_URL);
+let key = clean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+// אם שני הערכים הוחלפו ביניהם ב-Vercel – מחליפים בחזרה
+if (rawUrl && key && !looksLikeUrl(rawUrl) && looksLikeUrl(key)) {
+  [rawUrl, key] = [key, rawUrl];
+}
+
+/** תחילת הערך שהתקבל, כדי להציג במסך השגיאה */
+export const receivedUrlPreview = rawUrl ? rawUrl.slice(0, 40) : "";
+
+// מקבלים גם כתובת שהודבקה עם תוספות (למשל ‎/rest/v1/‎) או בלי https – משאירים רק את הבסיס
 function normalizeUrl(u: string): string | null {
   try {
-    const parsed = new URL(u);
+    const parsed = new URL(/^https?:\/\//i.test(u) ? u : `https://${u}`);
+    if (!parsed.hostname.includes(".")) return null;
     return parsed.protocol === "https:" || parsed.protocol === "http:" ? parsed.origin : null;
   } catch {
     return null;

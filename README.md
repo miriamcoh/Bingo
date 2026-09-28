@@ -43,6 +43,10 @@ Next.js + TypeScript + Tailwind, עם Supabase לסנכרון בין הטלפו�
 
 **שינוי שם לקישור (לא חובה):** ב-Vercel נכנסים ל-**Settings → Domains**, ואפשר להגדיר כתובת כמו `ayala-bingo.vercel.app`.
 
+**חשוב:** Vercel מכניס את המשתנים לאתר רק בזמן הבנייה. לכן אחרי כל שינוי שלהם חייבים לפרסם מחדש.
+- `NEXT_PUBLIC_SUPABASE_URL` הוא **הכתובת**, למשל `https://abcd1234.supabase.co`. את `abcd1234` רואים בשורת הכתובת של Supabase, אחרי `project/`.
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` הוא **המפתח**, שמתחיל ב-`eyJ...` או ב-`sb_publishable_...`.
+
 **אם שכחת משתנה או שינית אותו:** נכנסים ל-**Deployments**, לוחצים על שלוש הנקודות ליד הפרסום האחרון, ואז **Redeploy**.
 
 ## חלק 3: בדיקה לפני המסיבה ✅

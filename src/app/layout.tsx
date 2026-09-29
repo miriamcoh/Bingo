@@ -4,8 +4,8 @@ import { ToastProvider } from "@/components/Toast";
 import { Decorations } from "@/components/Decorations";
 
 export const metadata: Metadata = {
-  title: "הבינגו של אילה 🎂",
-  description: "בינגו חגיגי ליום ההולדת הראשון של אילה",
+  title: "בינגו יום הולדת 🎂",
+  description: "בינגו חגיגי ליום הולדת – משחק לכל האורחים מהטלפון",
 };
 
 export const viewport: Viewport = {

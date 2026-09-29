@@ -4,7 +4,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { useToast } from "./Toast";
 
-export function InviteCard({ code, compact = false }: { code: string; compact?: boolean }) {
+export function InviteCard({ code, title, compact = false }: { code: string; title: string; compact?: boolean }) {
   const toast = useToast();
   const [link, setLink] = useState("");
   const [open, setOpen] = useState(!compact);
@@ -13,7 +13,7 @@ export function InviteCard({ code, compact = false }: { code: string; compact?: 
     setLink(`${window.location.origin}/play/${code}`);
   }, [code]);
 
-  const message = `בואו לשחק בינגו ביום ההולדת של אילה! 🎂🎈\n${link}`;
+  const message = `בואו לשחק בינגו – ${title}! 🎂🎈\n${link}`;
 
   async function copy() {
     try {
@@ -37,7 +37,7 @@ export function InviteCard({ code, compact = false }: { code: string; compact?: 
       <h3 className="font-display text-lg font-bold">מזמינים את האורחים 💌</h3>
       {link && (
         <div className="rounded-2xl bg-white p-3 ring-4 ring-powder">
-          <QRCodeSVG value={link} size={compact ? 140 : 180} fgColor="#5c1f4b" />
+          <QRCodeSVG value={link} size={compact ? 140 : 180} fgColor="#1f2937" />
         </div>
       )}
       <p className="text-sm text-plum/70">סורקים עם המצלמה, או שולחים את הקישור בוואטסאפ</p>

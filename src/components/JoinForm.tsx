@@ -7,7 +7,15 @@ import { rpc } from "@/lib/supabase";
 import { errorMessage } from "@/lib/errors";
 import { setPlayerSession, type PlayerSession } from "@/lib/storage";
 
-export function JoinForm({ code, onJoined }: { code: string; onJoined: (s: PlayerSession) => void }) {
+export function JoinForm({
+  code,
+  title,
+  onJoined,
+}: {
+  code: string;
+  title: string;
+  onJoined: (s: PlayerSession) => void;
+}) {
   const toast = useToast();
   const [name, setName] = useState("");
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -34,7 +42,8 @@ export function JoinForm({ code, onJoined }: { code: string; onJoined: (s: Playe
   return (
     <form onSubmit={submit} className="card-surface flex flex-col gap-5 p-5">
       <div className="text-center">
-        <h2 className="font-display text-2xl font-bold text-hot">ברוכים הבאים לבינגו! 🎈</h2>
+        <h2 className="font-display text-2xl font-bold text-hot">🎂 {title}!</h2>
+        <p className="mt-1 font-bold">ברוכים הבאים לבינגו 🎈</p>
         <p className="mt-1 text-plum/70">כותבים שם ובוחרים דמות</p>
       </div>
       <label className="flex flex-col gap-2">

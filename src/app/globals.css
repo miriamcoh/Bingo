@@ -1,17 +1,76 @@
 @import "tailwindcss";
 
-@theme {
-  --color-blush: #fff2f8;
-  --color-powder: #ffd9ea;
-  --color-petal: #ffb3d4;
-  --color-rose: #ff7ab8;
-  --color-hot: #ff2e93;
-  --color-berry: #d6197f;
-  --color-plum: #5c1f4b;
-  --color-gold: #f2c14e;
-  --color-gold-deep: #c9971c;
+/* הצבעים מגיעים ממשתנים, כדי שאפשר יהיה להחליף עיצוב (ורוד / תכלת) בלי לשנות את הקוד */
+@theme inline {
+  --color-blush: var(--t-blush);
+  --color-powder: var(--t-powder);
+  --color-petal: var(--t-petal);
+  --color-rose: var(--t-rose);
+  --color-hot: var(--t-hot);
+  --color-berry: var(--t-berry);
+  --color-plum: var(--t-plum);
+  --color-gold: var(--t-gold);
+  --color-gold-deep: var(--t-gold-deep);
   --font-sans: "Rubik", "Varela Round", system-ui, sans-serif;
   --font-display: "Varela Round", "Rubik", system-ui, sans-serif;
+}
+
+/* עיצוב ורוד (ברירת המחדל) */
+:root {
+  --t-blush: #fff2f8;
+  --t-powder: #ffd9ea;
+  --t-petal: #ffb3d4;
+  --t-rose: #ff7ab8;
+  --t-hot: #ff2e93;
+  --t-berry: #d6197f;
+  --t-plum: #5c1f4b;
+  --t-gold: #f2c14e;
+  --t-gold-deep: #c9971c;
+  --t-bg-1: #ffe3f0;
+  --t-bg-2: #fff0d9;
+  --t-bg-3: #ffd6ea;
+  --t-btn-shadow: #a3125f;
+  --t-ball-1: #ff9ccc;
+  --t-ball-2: #ff2e93;
+  --t-ball-3: #b8106a;
+  --t-step2-a: #ffd0e6;
+  --t-step2-b: #ff9cc8;
+  --t-step3-a: #ffe3ef;
+  --t-step3-b: #ffb8d8;
+  --t-balloon-1: #ff8cc6;
+  --t-balloon-2: #f2c14e;
+  --t-balloon-3: #ff4fa3;
+  --t-balloon-4: #ffd9ea;
+  --t-string: #e4a9c6;
+}
+
+/* עיצוב לבן ותכלת */
+:root[data-theme="blue"] {
+  --t-blush: #f7fbff;
+  --t-powder: #dff0fb;
+  --t-petal: #b8dcf3;
+  --t-rose: #6cbcea;
+  --t-hot: #1e9be0;
+  --t-berry: #1678b8;
+  --t-plum: #1d3b57;
+  --t-gold: #f2c14e;
+  --t-gold-deep: #c9971c;
+  --t-bg-1: #e3f2fc;
+  --t-bg-2: #ffffff;
+  --t-bg-3: #d6ecfa;
+  --t-btn-shadow: #0f5f94;
+  --t-ball-1: #a6daf8;
+  --t-ball-2: #1e9be0;
+  --t-ball-3: #0f6aa6;
+  --t-step2-a: #d7ecfa;
+  --t-step2-b: #8ccbf0;
+  --t-step3-a: #e8f5fd;
+  --t-step3-b: #b5dcf4;
+  --t-balloon-1: #7cc4f0;
+  --t-balloon-2: #f2c14e;
+  --t-balloon-3: #3aa8e8;
+  --t-balloon-4: #d9eefb;
+  --t-string: #a9cfe6;
 }
 
 html,
@@ -21,12 +80,12 @@ body {
 
 body {
   background:
-    radial-gradient(circle at 15% 10%, #ffe3f0 0, transparent 40%),
-    radial-gradient(circle at 85% 30%, #fff0d9 0, transparent 35%),
-    radial-gradient(circle at 50% 100%, #ffd6ea 0, transparent 50%),
-    var(--color-blush);
+    radial-gradient(circle at 15% 10%, var(--t-bg-1) 0, transparent 40%),
+    radial-gradient(circle at 85% 30%, var(--t-bg-2) 0, transparent 35%),
+    radial-gradient(circle at 50% 100%, var(--t-bg-3) 0, transparent 50%),
+    var(--t-blush);
   background-attachment: fixed;
-  color: var(--color-plum);
+  color: var(--t-plum);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -36,11 +95,11 @@ body {
 }
 .btn-primary {
   @apply text-white shadow-lg;
-  background: linear-gradient(135deg, var(--color-hot), var(--color-berry));
-  box-shadow: 0 6px 0 #a3125f, 0 10px 24px rgb(214 25 127 / 0.35);
+  background: linear-gradient(135deg, var(--t-hot), var(--t-berry));
+  box-shadow: 0 6px 0 var(--t-btn-shadow), 0 10px 24px color-mix(in srgb, var(--t-berry) 35%, transparent);
 }
 .btn-primary:active:not(:disabled) {
-  box-shadow: 0 2px 0 #a3125f;
+  box-shadow: 0 2px 0 var(--t-btn-shadow);
   transform: translateY(4px);
 }
 .btn-soft {
@@ -48,8 +107,8 @@ body {
 }
 .btn-gold {
   @apply text-plum shadow-lg;
-  background: linear-gradient(135deg, #ffe08a, var(--color-gold));
-  box-shadow: 0 5px 0 var(--color-gold-deep);
+  background: linear-gradient(135deg, #ffe08a, var(--t-gold));
+  box-shadow: 0 5px 0 var(--t-gold-deep);
 }
 .card-surface {
   @apply rounded-3xl bg-white/85 shadow-xl ring-1 ring-petal/60 backdrop-blur;
@@ -84,8 +143,8 @@ body {
 .animate-twinkle { animation: twinkle 2.4s ease-in-out infinite; }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 0 3px var(--color-gold), 0 0 12px 4px rgb(242 193 78 / 0.7); transform: scale(1); }
-  50% { box-shadow: 0 0 0 5px var(--color-hot), 0 0 22px 8px rgb(255 46 147 / 0.6); transform: scale(1.08); }
+  0%, 100% { box-shadow: 0 0 0 3px var(--t-gold), 0 0 12px 4px rgb(242 193 78 / 0.7); transform: scale(1); }
+  50% { box-shadow: 0 0 0 5px var(--t-hot), 0 0 22px 8px color-mix(in srgb, var(--t-hot) 60%, transparent); transform: scale(1.08); }
 }
 .animate-glow { animation: glow-pulse 0.9s ease-in-out infinite; }
 

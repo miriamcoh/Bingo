@@ -7,8 +7,8 @@ import type { Player } from "@/lib/types";
 
 const STEP_STYLE: Record<number, { height: string; bg: string; medal: string }> = {
   1: { height: "h-36 sm:h-44", bg: "linear-gradient(180deg, #ffe08a, #f2c14e)", medal: "🥇" },
-  2: { height: "h-24 sm:h-32", bg: "linear-gradient(180deg, #ffd0e6, #ff9cc8)", medal: "🥈" },
-  3: { height: "h-16 sm:h-24", bg: "linear-gradient(180deg, #ffe3ef, #ffb8d8)", medal: "🥉" },
+  2: { height: "h-24 sm:h-32", bg: "linear-gradient(180deg, var(--t-step2-a), var(--t-step2-b))", medal: "🥈" },
+  3: { height: "h-16 sm:h-24", bg: "linear-gradient(180deg, var(--t-step3-a), var(--t-step3-b))", medal: "🥉" },
 };
 
 function Step({ place, players }: { place: number; players: Player[] }) {
@@ -37,7 +37,7 @@ function Step({ place, players }: { place: number; players: Player[] }) {
       {players.length > 0 ? (
         <div
           className={`flex w-full items-start justify-center rounded-t-2xl pt-2 font-display text-3xl font-bold text-white shadow-lg ${style.height}`}
-          style={{ background: style.bg, textShadow: "0 2px 4px rgb(160 20 100 / 0.4)" }}
+          style={{ background: style.bg, textShadow: "0 2px 4px color-mix(in srgb, var(--t-plum) 45%, transparent)" }}
         >
           <span>
             {style.medal} {place}
@@ -54,7 +54,7 @@ function Step({ place, players }: { place: number; players: Player[] }) {
  * פודיום: מקום 1 באמצע ולמעלה, 2 משמאל, 3 מימין.
  * בתיקו כמה שחקנים עומדים יחד על אותה מדרגה.
  */
-export function Podium({ players }: { players: Player[] }) {
+export function Podium({ players, name }: { players: Player[]; name: string }) {
   useEffect(() => celebrate(7000), []);
 
   const winners = players
@@ -65,7 +65,7 @@ export function Podium({ players }: { players: Player[] }) {
   return (
     <section className="card-surface overflow-hidden px-3 pt-6">
       <h2 className="text-center font-display text-4xl font-bold text-hot drop-shadow-sm sm:text-5xl">
-        מזל טוב אילה! 🎂
+        מזל טוב {name}! 🎂
       </h2>
       <p className="mt-1 text-center text-plum/70">המנצחים של הבינגו</p>
       {winners.length === 0 ? (

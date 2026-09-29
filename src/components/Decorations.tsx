@@ -8,7 +8,7 @@ function Balloon({ color, className, delay }: { color: string; className: string
       style={{ animationDelay: delay }}
       aria-hidden
     >
-      <path d="M30 74 Q26 90 32 100 Q38 110 30 120" fill="none" stroke="#e4a9c6" strokeWidth={1.5} />
+      <path d="M30 74 Q26 90 32 100 Q38 110 30 120" fill="none" stroke="var(--t-string)" strokeWidth={1.5} />
       <ellipse cx={30} cy={36} rx={24} ry={30} fill={color} />
       <path d="M26 66 L34 66 L30 73 Z" fill={color} />
       <ellipse cx={21} cy={24} rx={5} ry={9} fill="#fff" opacity={0.45} transform="rotate(-20 21 24)" />
@@ -28,10 +28,10 @@ const SPARKLES = [
 export function Decorations() {
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden>
-      <Balloon color="#ff8cc6" className="-left-3 top-16 w-14 opacity-70 md:w-20" delay="0s" />
-      <Balloon color="#f2c14e" className="left-8 top-40 w-10 opacity-60 md:w-14" delay="1.5s" />
-      <Balloon color="#ff4fa3" className="-right-2 top-24 w-12 opacity-70 md:w-20" delay="0.8s" />
-      <Balloon color="#ffd9ea" className="right-10 top-72 w-10 opacity-80 md:w-16" delay="2.2s" />
+      <Balloon color="var(--t-balloon-1)" className="-left-3 top-16 w-14 opacity-70 md:w-20" delay="0s" />
+      <Balloon color="var(--t-balloon-2)" className="left-8 top-40 w-10 opacity-60 md:w-14" delay="1.5s" />
+      <Balloon color="var(--t-balloon-3)" className="-right-2 top-24 w-12 opacity-70 md:w-20" delay="0.8s" />
+      <Balloon color="var(--t-balloon-4)" className="right-10 top-72 w-10 opacity-80 md:w-16" delay="2.2s" />
       {SPARKLES.map((s, i) => (
         <span
           key={i}

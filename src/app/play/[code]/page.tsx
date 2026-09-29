@@ -18,6 +18,8 @@ import { rpc } from "@/lib/supabase";
 import { getPlayerSession, setPlayerSession, type PlayerSession } from "@/lib/storage";
 import { errorCode, errorMessage } from "@/lib/errors";
 import { useRoom } from "@/lib/useRoom";
+import { useApplyTheme } from "@/lib/theme";
+import { celebrantName, celebrationTitle } from "@/lib/types";
 import type { MyCard } from "@/lib/types";
 
 export default function PlayPage() {
@@ -25,6 +27,8 @@ export default function PlayPage() {
   const code = String(params.code ?? "").toUpperCase();
   const toast = useToast();
   const { room, players, state, refresh } = useRoom(code);
+  useApplyTheme(room ? (room.theme ?? "pink") : undefined);
+  const title = celebrationTitle(room);
 
   const [session, setSession] = useState<PlayerSession | null | undefined>(undefined);
   const [myCard, setMyCard] = useState<MyCard | null>(null);
@@ -130,8 +134,8 @@ export default function PlayPage() {
   }
   if (!session) {
     return (
-      <Shell>
-        <JoinForm code={code} onJoined={(s) => { setSession(s); void refresh(); }} />
+      <Shell title={title}>
+        <JoinForm code={code} title={title} onJoined={(s) => { setSession(s); void refresh(); }} />
       </Shell>
     );
   }
@@ -142,7 +146,7 @@ export default function PlayPage() {
   const remaining = myCard.card.length - myCard.card.filter((n) => markedSet.has(n)).length;
 
   return (
-    <Shell>
+    <Shell title={title}>
       {/* מי אני */}
       <div className="flex items-center gap-3 rounded-full bg-white/80 py-1.5 pe-4 ps-1.5 shadow-md">
         <Avatar id={me?.avatar ?? "bunny"} size={44} ring={me?.place != null} />
@@ -156,7 +160,7 @@ export default function PlayPage() {
         )}
       </div>
 
-      {room.status === "finished" && <Podium players={players} />}
+      {room.status === "finished" && <Podium players={players} name={celebrantName(room)} />}
 
       {room.status === "lobby" && (
         <CenterMessage emoji="🎈" title="מחכים שהמנהל/ת יתחילו את המשחק...">

@@ -8,6 +8,21 @@ export interface Room {
   tie_deadline: string | null;
   game_no: number;
   created_at: string;
+  celebrant_name?: string;
+  celebrant_age?: number | null;
+  theme?: ThemeId;
+}
+
+export type ThemeId = "pink" | "blue";
+
+/** שם בעל/ת השמחה (אם מסד הנתונים עוד לא עודכן – ברירת המחדל היא אילה) */
+export const celebrantName = (room: Room | null | undefined) => room?.celebrant_name || "אילה";
+
+/** "יום הולדת 3 לנועם" – ניסוח שמתאים גם לבן וגם לבת */
+export function celebrationTitle(room: Room | null | undefined) {
+  const name = celebrantName(room);
+  const age = room?.celebrant_age;
+  return age != null ? `יום הולדת ${age} ל${name}` : `יום הולדת ל${name}`;
 }
 
 export interface Player {

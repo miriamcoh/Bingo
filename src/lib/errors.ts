@@ -12,6 +12,10 @@ const MESSAGES: Record<string, string> = {
   ROOM_FULL: "החדר מלא",
   BAD_TOKEN: "לא הצלחנו לזהות אותך, נסו לרענן את הדף",
   TIMEOUT: "השרת לא עונה 🙁 בדקו את החיבור לאינטרנט ונסו שוב",
+  BAD_CELEBRANT: "צריך לכתוב את שם החוגג/ת (עד 20 אותיות)",
+  BAD_AGE: "הגיל צריך להיות מספר בין 0 ל-120",
+  BAD_THEME: "צריך לבחור עיצוב",
+  "Could not find the function": "צריך לעדכן את מסד הנתונים: מריצים שוב את הקובץ schema.sql ב-Supabase",
 };
 
 export function errorMessage(err: unknown): string {

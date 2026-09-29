@@ -46,8 +46,8 @@ export function DrawnBall({ number, size = "md" }: { number: number | null; size
           rolling ? "animate-roll" : "animate-pop"
         }`}
         style={{
-          background: "radial-gradient(circle at 30% 25%, #ff9ccc 0, #ff2e93 45%, #b8106a 100%)",
-          boxShadow: "0 12px 30px rgb(214 25 127 / 0.45), inset 0 -10px 20px rgb(0 0 0 / 0.15)",
+          background: "radial-gradient(circle at 30% 25%, var(--t-ball-1) 0, var(--t-ball-2) 45%, var(--t-ball-3) 100%)",
+          boxShadow: "0 12px 30px color-mix(in srgb, var(--t-berry) 45%, transparent), inset 0 -10px 20px rgb(0 0 0 / 0.15)",
         }}
         aria-live="polite"
       >

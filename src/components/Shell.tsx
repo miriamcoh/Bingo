@@ -2,12 +2,20 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { configProblem, isConfigured, receivedUrlPreview } from "@/lib/supabase";
 
-export function Shell({ children, wide = false }: { children: ReactNode; wide?: boolean }) {
+export function Shell({
+  children,
+  wide = false,
+  title = "בינגו יום הולדת",
+}: {
+  children: ReactNode;
+  wide?: boolean;
+  title?: string;
+}) {
   return (
     <main className={`mx-auto flex min-h-dvh w-full flex-col gap-4 px-4 pb-10 pt-4 ${wide ? "max-w-6xl" : "max-w-lg"}`}>
       <header className="flex items-center justify-center">
         <Link href="/" className="font-display text-xl font-bold text-berry">
-          🎈 הבינגו של אילה 🎂
+          🎈 {title} 🎂
         </Link>
       </header>
       {isConfigured ? children : <SetupNotice />}

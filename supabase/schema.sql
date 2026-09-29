@@ -33,6 +33,17 @@ create table if not exists public.players (
 );
 create index if not exists players_room_idx on public.players(room_id);
 
+-- הגדרות החגיגה: שם בעל/ת השמחה, הגיל והעיצוב (ורוד / תכלת)
+alter table public.rooms add column if not exists celebrant_name text not null default 'אילה';
+alter table public.rooms add column if not exists celebrant_age int;
+alter table public.rooms add column if not exists theme text not null default 'pink';
+alter table public.rooms drop constraint if exists rooms_celebration_check;
+alter table public.rooms add constraint rooms_celebration_check check (
+  char_length(celebrant_name) between 1 and 20
+  and (celebrant_age is null or celebrant_age between 0 and 120)
+  and theme in ('pink', 'blue')
+);
+
 -- ---------------------------------------------------------------------
 --  טבלאות סודיות (אי אפשר לקרוא אותן מהדפדפן בכלל)
 -- ---------------------------------------------------------------------
@@ -103,12 +114,26 @@ revoke all on function public._finalize_if_due(uuid) from public, anon, authenti
 -- ---------------------------------------------------------------------
 --  פונקציות למנהל
 -- ---------------------------------------------------------------------
-create or replace function public.create_room()
+-- בודק ומנקה את הגדרות החגיגה
+create or replace function public._check_celebration(p_name text, p_age int, p_theme text)
+returns void language plpgsql set search_path = public as $$
+begin
+  if p_name is null or char_length(trim(p_name)) < 1 or char_length(trim(p_name)) > 20 then
+    raise exception 'BAD_CELEBRANT';
+  end if;
+  if p_age is not null and (p_age < 0 or p_age > 120) then raise exception 'BAD_AGE'; end if;
+  if p_theme not in ('pink', 'blue') then raise exception 'BAD_THEME'; end if;
+end $$;
+revoke all on function public._check_celebration(text, int, text) from public, anon, authenticated;
+
+drop function if exists public.create_room();
+create or replace function public.create_room(p_name text, p_age int, p_theme text)
 returns json language plpgsql security definer set search_path = public as $$
 declare
   alphabet text := 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   v_code text; v_room uuid; v_token uuid; i int;
 begin
+  perform public._check_celebration(p_name, p_age, p_theme);
   loop
     v_code := '';
     for i in 1..5 loop
@@ -116,9 +141,22 @@ begin
     end loop;
     exit when not exists (select 1 from public.rooms where code = v_code);
   end loop;
-  insert into public.rooms (code) values (v_code) returning id into v_room;
+  insert into public.rooms (code, celebrant_name, celebrant_age, theme)
+  values (v_code, trim(p_name), p_age, p_theme) returning id into v_room;
   insert into public.room_secrets (room_id) values (v_room) returning host_token into v_token;
   return json_build_object('code', v_code, 'host_token', v_token);
+end $$;
+
+-- המנהל יכול לתקן את השם / הגיל / העיצוב
+create or replace function public.update_celebration(p_code text, p_host_token uuid, p_name text, p_age int, p_theme text)
+returns void language plpgsql security definer set search_path = public as $$
+declare v public.rooms;
+begin
+  v := public._host_room(p_code, p_host_token);
+  perform public._check_celebration(p_name, p_age, p_theme);
+  update public.rooms
+     set celebrant_name = trim(p_name), celebrant_age = p_age, theme = p_theme
+   where id = v.id;
 end $$;
 
 create or replace function public.start_game(p_code text, p_host_token uuid)
@@ -290,7 +328,8 @@ begin
 end $$;
 
 grant execute on function
-  public.create_room(),
+  public.create_room(text, int, text),
+  public.update_celebration(text, uuid, text, int, text),
   public.start_game(text, uuid),
   public.draw_number(text, uuid),
   public.end_game(text, uuid),

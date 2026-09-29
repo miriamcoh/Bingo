@@ -4,10 +4,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Shell } from "@/components/Shell";
 import { Avatar } from "@/components/Avatar";
+import { CelebrationForm, type Celebration } from "@/components/CelebrationForm";
 import { useToast } from "@/components/Toast";
 import { rpc } from "@/lib/supabase";
 import { setHostToken } from "@/lib/storage";
 import { errorMessage } from "@/lib/errors";
+import { useApplyTheme } from "@/lib/theme";
+import type { ThemeId } from "@/lib/types";
 
 export default function Home() {
   const router = useRouter();
@@ -15,10 +18,15 @@ export default function Home() {
   const [creating, setCreating] = useState(false);
   const [showJoin, setShowJoin] = useState(false);
   const [code, setCode] = useState("");
+  const [showHost, setShowHost] = useState(false);
+  const [previewTheme, setPreviewTheme] = useState<ThemeId>("pink");
 
-  async function createRoom() {
+  // בדף הבית מציגים את העיצוב שהמנהל בוחר עכשיו (או ורוד כברירת מחדל)
+  useApplyTheme(previewTheme);
+
+  async function createRoom(c: Celebration) {
     setCreating(true);
-    const { data, error } = await rpc("create_room");
+    const { data, error } = await rpc("create_room", { p_name: c.name, p_age: c.age, p_theme: c.theme });
     if (error || !data) {
       toast(errorMessage(error), "warn");
       setCreating(false);
@@ -44,9 +52,9 @@ export default function Home() {
           ))}
         </div>
         <h1 className="mt-5 font-display text-4xl font-bold leading-tight text-hot sm:text-5xl">
-          אילה בת שנה!
+          בינגו יום הולדת!
         </h1>
-        <p className="mt-2 text-lg">בואו לשחק בינגו של יום הולדת 🎉</p>
+        <p className="mt-2 text-lg">משחק חגיגי לכל האורחים, ישר מהטלפון 🎉</p>
       </section>
 
       <section className="card-surface mt-4 flex flex-col gap-4 p-6">
@@ -74,10 +82,20 @@ export default function Home() {
             </div>
           </form>
         )}
-        <button className="btn btn-soft py-4 text-lg" onClick={createRoom} disabled={creating}>
-          {creating ? "יוצרים חדר..." : "👑 אני מנהל/ת הבינגו"}
+        <button className="btn btn-soft py-4 text-lg" onClick={() => setShowHost((s) => !s)}>
+          👑 אני מנהל/ת הבינגו
         </button>
       </section>
+
+      {showHost && (
+        <CelebrationForm
+          submitLabel="🎉 יצירת חדר משחק"
+          busy={creating}
+          onSubmit={createRoom}
+          onCancel={() => setShowHost(false)}
+          onThemePreview={setPreviewTheme}
+        />
+      )}
     </Shell>
   );
 }
